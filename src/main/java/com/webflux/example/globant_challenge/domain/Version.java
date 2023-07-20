@@ -1,10 +1,8 @@
 package com.webflux.example.globant_challenge.domain;
 
-import com.webflux.example.globant_challenge.constant.CriptoCurrencyEnum;
+import com.webflux.example.globant_challenge.constant.CryptoCurrencyEnum;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -34,7 +32,7 @@ public class Version {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "crypto_currency")
-    private CriptoCurrencyEnum cryptoCurrency;
+    private CryptoCurrencyEnum cryptoCurrency;
 
     @ManyToOne
     @JoinColumn(name="quotation_id", nullable=false)

@@ -8,6 +8,7 @@ import com.webflux.example.globant_challenge.dto.internal.request.QuotationDataR
 import com.webflux.example.globant_challenge.dto.internal.request.QuotationRequest;
 import com.webflux.example.globant_challenge.repository.PurchaseRepository;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -32,12 +33,13 @@ public class PurchaseService {
     @Qualifier("jdbcScheduler")
     private final Scheduler jdbcScheduler;
 
-    public Purchase savePurchase(PurchaseRequest purchaseRequest) {
-        Quotation quotation = quotationService.saveQuotation(new QuotationRequest(
-                new QuotationDataRequest(
-                purchaseRequest.getData().getModel(),
-                purchaseRequest.getData().getCryptoCurrency()
-        )));
+    public Purchase savePurchase(@NotNull PurchaseRequest purchaseRequest) {
+        Quotation quotation = quotationService.saveQuotation(
+                new QuotationRequest(
+                        new QuotationDataRequest(
+                                purchaseRequest.getData().getModel(),
+                                purchaseRequest.getData().getCryptoCurrency()
+                        )));
         Purchase purchase = new Purchase(
                 null,
                 UUID.randomUUID(),
@@ -51,11 +53,13 @@ public class PurchaseService {
         return mPurchase.block();
     }
 
-    public List<Purchase> getPurchaseReport(PurchaseReportRequest purchaseReportRequest) {
+    public List<Purchase> getPurchaseReport(@NotNull PurchaseReportRequest purchaseReportRequest) {
         List<Purchase> purchases = purchaseRepository.findAllWithCreationDateTimeBefore(
                 purchaseReportRequest.getData().getDate().atStartOfDay());
-        return purchases.stream().filter(p -> p.getQuotation().getModel().equals(purchaseReportRequest.getData().getModel())
-                && p.getQuotation().getCryptoCurrency().name().equals(purchaseReportRequest.getData().getCryptoCurrency()))
+        return purchases.stream().filter(p -> p.getQuotation().getModel().equals(
+                purchaseReportRequest.getData().getModel())
+                        && p.getQuotation().getCryptoCurrency().name().equals(
+                                purchaseReportRequest.getData().getCryptoCurrency()))
                 .collect(Collectors.toList());
     }
 

@@ -1,7 +1,7 @@
 package com.webflux.example.globant_challenge.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.webflux.example.globant_challenge.constant.CriptoCurrencyEnum;
+import com.webflux.example.globant_challenge.constant.CryptoCurrencyEnum;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,7 +31,7 @@ public class Quotation {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "crypto_currency")
-    private CriptoCurrencyEnum cryptoCurrency;
+    private CryptoCurrencyEnum cryptoCurrency;
 
     @Column(name = "model")
     private String model;

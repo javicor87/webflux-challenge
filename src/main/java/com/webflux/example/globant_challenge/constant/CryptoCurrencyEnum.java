@@ -1,6 +1,6 @@
 package com.webflux.example.globant_challenge.constant;
 
-public enum CriptoCurrencyEnum {
+public enum CryptoCurrencyEnum {
 
     BTC, ETH
 }

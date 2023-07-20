@@ -1,14 +1,17 @@
 package com.webflux.example.globant_challenge.controller;
 
 import com.webflux.example.globant_challenge.constant.CarBrandEnum;
+import com.webflux.example.globant_challenge.constant.CryptoCurrencyEnum;
 import com.webflux.example.globant_challenge.dto.internal.request.QuotationRequest;
 import com.webflux.example.globant_challenge.dto.internal.response.ModelCarInfoResponse;
 import com.webflux.example.globant_challenge.dto.internal.response.QuotationResponse;
 import com.webflux.example.globant_challenge.mapper.QuotationMapper;
 import com.webflux.example.globant_challenge.service.QuotationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,6 +39,11 @@ public class QuotationController {
     @PostMapping
     public ResponseEntity<QuotationResponse> createQuotation(@RequestBody QuotationRequest quotationRequest)
             throws URISyntaxException {
+        try {
+            CryptoCurrencyEnum.valueOf(quotationRequest.getData().getCryptoCurrency());
+        } catch (IllegalArgumentException ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cryptocurrency not allowed");
+        }
         return ResponseEntity.created(new URI("/quotation")).body(
                 QuotationMapper.buildQuotationResponse(quotationService.saveQuotation(quotationRequest))
         );

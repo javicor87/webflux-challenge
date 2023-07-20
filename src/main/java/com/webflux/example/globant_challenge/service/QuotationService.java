@@ -3,7 +3,7 @@ package com.webflux.example.globant_challenge.service;
 import com.webflux.example.globant_challenge.client.ModelCarClient;
 import com.webflux.example.globant_challenge.client.builder.CryptoCurrencyClientBuilder;
 import com.webflux.example.globant_challenge.constant.CarBrandEnum;
-import com.webflux.example.globant_challenge.constant.CriptoCurrencyEnum;
+import com.webflux.example.globant_challenge.constant.CryptoCurrencyEnum;
 import com.webflux.example.globant_challenge.domain.Quotation;
 import com.webflux.example.globant_challenge.domain.Version;
 import com.webflux.example.globant_challenge.dto.external.response.ModelCarResponse;
@@ -12,6 +12,7 @@ import com.webflux.example.globant_challenge.dto.internal.response.ModelCarInfoR
 import com.webflux.example.globant_challenge.repository.QuotationRepository;
 import com.webflux.example.globant_challenge.repository.VersionRepository;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,7 @@ public class QuotationService {
     @Qualifier("jdbcScheduler")
     private final Scheduler jdbcScheduler;
 
-    public List<ModelCarInfoResponse> getModelCars(Optional<String> brand) {
+    public List<ModelCarInfoResponse> getModelCars(@NotNull Optional<String> brand) {
         List<ModelCarResponse> modelCars;
         if (brand.isEmpty()) {
             modelCars = modelCarClient.findAllModelCars();
@@ -55,14 +56,14 @@ public class QuotationService {
     }
 
     @Cacheable("lastModelQuotation")
-    public Quotation saveQuotation(QuotationRequest quotationRequest) {
+    public Quotation saveQuotation(@NotNull QuotationRequest quotationRequest) {
         List<ModelCarResponse> modelCars = getModelCars(quotationRequest.getData().getModel());
         Double usdPrice = cryptoCurrencyClientBuilder.getCryptoCurrencyUsdPrice(quotationRequest.getData().getCryptoCurrency());
         Quotation quotation = new Quotation(
                 null,
                 UUID.randomUUID(),
                 60,
-                CriptoCurrencyEnum.valueOf(quotationRequest.getData().getCryptoCurrency()),
+                CryptoCurrencyEnum.valueOf(quotationRequest.getData().getCryptoCurrency()),
                 quotationRequest.getData().getModel(),
                 LocalDateTime.now(),
                 null);
@@ -73,7 +74,7 @@ public class QuotationService {
                         car.getVerNombre(),
                         car.getVeaPrecioPvp(),
                         car.getVeaPrecioPvp() / usdPrice,
-                        CriptoCurrencyEnum.valueOf(quotationRequest.getData().getCryptoCurrency()),
+                        CryptoCurrencyEnum.valueOf(quotationRequest.getData().getCryptoCurrency()),
                         quotation
                 )).collect(Collectors.toList());
         quotation.setVersions(versions);

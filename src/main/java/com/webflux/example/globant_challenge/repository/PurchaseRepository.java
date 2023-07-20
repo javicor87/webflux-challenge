@@ -6,14 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface PurchaseRepository extends CrudRepository<Purchase, Long> {
 
-    @Query("select p from Purchase p where a.createdAt >= :creationDateTime")
+    @Query("select p from Purchase p where p.createdAt >= :creationDate")
     List<Purchase> findAllWithCreationDateTimeBefore(
-            @Param("creationDateTime") Date creationDateTime);
+            @Param("creationDate") LocalDateTime creationDate);
 
 }

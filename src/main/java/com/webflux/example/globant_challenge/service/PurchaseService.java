@@ -17,6 +17,7 @@ import reactor.core.scheduler.Scheduler;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -51,9 +52,11 @@ public class PurchaseService {
     }
 
     public List<Purchase> getPurchaseReport(PurchaseReportRequest purchaseReportRequest) {
-        /*List<Purchase> purchases = purchaseRepository.findAllWithCreationDateTimeBefore(
-                purchaseReportRequest.getData().getDate());*/
-        return null;
+        List<Purchase> purchases = purchaseRepository.findAllWithCreationDateTimeBefore(
+                purchaseReportRequest.getData().getDate().atStartOfDay());
+        return purchases.stream().filter(p -> p.getQuotation().getModel().equals(purchaseReportRequest.getData().getModel())
+                && p.getQuotation().getCryptoCurrency().name().equals(purchaseReportRequest.getData().getCryptoCurrency()))
+                .collect(Collectors.toList());
     }
 
 }

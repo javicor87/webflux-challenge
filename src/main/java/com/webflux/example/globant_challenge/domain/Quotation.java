@@ -3,10 +3,7 @@ package com.webflux.example.globant_challenge.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.webflux.example.globant_challenge.constant.CriptoCurrencyEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "quotation")

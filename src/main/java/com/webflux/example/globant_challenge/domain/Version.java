@@ -2,16 +2,14 @@ package com.webflux.example.globant_challenge.domain;
 
 import com.webflux.example.globant_challenge.constant.CriptoCurrencyEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "version")

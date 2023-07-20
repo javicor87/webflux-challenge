@@ -11,5 +11,5 @@ public class PurchaseReportDataRequest {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate date;
     private String model;
-    private String criptoCurrency;
+    private String cryptoCurrency;
 }

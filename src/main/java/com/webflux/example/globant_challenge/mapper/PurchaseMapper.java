@@ -3,8 +3,12 @@ package com.webflux.example.globant_challenge.mapper;
 import com.webflux.example.globant_challenge.domain.Purchase;
 import com.webflux.example.globant_challenge.domain.Version;
 import com.webflux.example.globant_challenge.dto.internal.response.PurchaseDataResponse;
+import com.webflux.example.globant_challenge.dto.internal.response.PurchaseReportDataResponse;
+import com.webflux.example.globant_challenge.dto.internal.response.PurchaseReportResponse;
 import com.webflux.example.globant_challenge.dto.internal.response.PurchaseResponse;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class PurchaseMapper {
@@ -25,6 +29,30 @@ public class PurchaseMapper {
                                 purchase.getPurchaseId()
                         )
         );
+    }
+
+    public static PurchaseReportResponse buildPurchaseReportResponse(List<Purchase> purchases) {
+        PurchaseReportResponse report = new PurchaseReportResponse();
+        List<PurchaseReportDataResponse> dataReport = new ArrayList<>();
+        purchases.forEach(
+                p -> {
+                    p.getQuotation().getVersions().forEach(
+                            v -> {
+                                dataReport.add(
+                                        new PurchaseReportDataResponse(
+                                                p.getCreatedAt().toLocalDate(),
+                                                v.getVersion(),
+                                                v.getCryptoCurrency().name(),
+                                                v.getPriceUsd(),
+                                                v.getPriceCryptocurrency()
+                                        )
+                                );
+                            }
+                    );
+                }
+        );
+        report.setData(dataReport);
+        return report;
     }
 
 }

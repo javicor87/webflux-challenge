@@ -1,6 +1,8 @@
 package com.webflux.example.globant_challenge.controller;
 
+import com.webflux.example.globant_challenge.dto.internal.request.PurchaseReportRequest;
 import com.webflux.example.globant_challenge.dto.internal.request.PurchaseRequest;
+import com.webflux.example.globant_challenge.dto.internal.response.PurchaseReportResponse;
 import com.webflux.example.globant_challenge.dto.internal.response.PurchaseResponse;
 import com.webflux.example.globant_challenge.mapper.PurchaseMapper;
 import com.webflux.example.globant_challenge.service.PurchaseService;
@@ -26,6 +28,15 @@ public class PurchaseController {
             throws URISyntaxException {
         return ResponseEntity.created(new URI("/purchase")).body(
                 PurchaseMapper.buildPurchaseResponse(purchaseService.savePurchase(purchaseRequest))
+        );
+    }
+
+    @PostMapping("/report")
+    public ResponseEntity<PurchaseReportResponse> getPurchaseReport(
+            @RequestBody PurchaseReportRequest purchaseReportRequest
+    ) throws URISyntaxException {
+        return ResponseEntity.created(new URI("/report")).body(
+                PurchaseMapper.buildPurchaseReportResponse(purchaseService.getPurchaseReport(purchaseReportRequest))
         );
     }
 
